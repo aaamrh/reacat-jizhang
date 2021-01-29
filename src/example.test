@@ -1,0 +1,24 @@
+// 断岩库 Jest 的使用 
+
+test('equal', ()=>{
+  expect(2+2).toBe(4)
+})
+
+test('not equal', ()=>{
+  expect(2+2).not.toBe(5)
+})
+
+test('true or false', ()=>{
+  expect(1).toBeTruthy()
+  expect(0).toBeFalsy()
+})
+
+test('number', ()=>{
+  expect(4).toBeGreaterThan(2)
+  expect(4).toBeLessThan(5)
+})
+
+test('object', ()=>{
+  expect({name:'vava'}).toEqual({name: 'vava'})
+  // expect({name:'vava'}).toBe({name: 'vava'}) // 不能使用 toBe
+})

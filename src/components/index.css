@@ -1,0 +1,18 @@
+
+/* ViewTab */
+
+.m-tab{
+  margin: 20px;
+}
+
+.m-tab span{
+  padding: 5px 10px;
+  margin: 10px;
+}
+
+.m-tab span.active{
+  background-color:#007bff;
+}
+.m-tab span.active a{
+  color:#fff;
+}
