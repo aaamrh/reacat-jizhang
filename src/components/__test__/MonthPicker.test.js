@@ -1,8 +1,12 @@
-import { render, mount } from 'enzyme'  
+import Enzyme, { render, mount } from 'enzyme'  
 import MonthPicker from '../MonthPicker'
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { items } from '../../containers/home'
 
 
+Enzyme.configure({ adapter: new Adapter() });
+
+ 
 /** 
  * 犹豫涉及了一些只有DOM环境才存在的变量， 比如 event, document添加click事件
  * 因此需要使用mount

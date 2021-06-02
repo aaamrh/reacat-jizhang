@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { range } from '../utils'
 
 
+
 class MonthPicker extends Component {
   constructor(props){
     super(props)
@@ -24,6 +25,7 @@ class MonthPicker extends Component {
   
   handleClick = (event) => {
     // GET
+    console.log('this.node', this.node)
     if (this.node.contains(event.target)) {
       return;
     }
@@ -67,8 +69,8 @@ class MonthPicker extends Component {
     const yearRange = range(9, -4).map( number => number + year )
 
     return (
-      // GET ref
-      <div className="dropdown month-picker-component" ref={(ref) => { console.log(ref); this.node = ref }}> 
+      // GET ref, 获取DOM节点
+      <div className="dropdown month-picker-component" ref={(ref) => { this.node = ref }}> 
         <h4>选择月份</h4>
         <button 
           className="btn btn-secondary dropdown-toggle" 

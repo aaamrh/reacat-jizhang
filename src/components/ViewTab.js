@@ -31,6 +31,7 @@ const ViewTab = ({ activeTab, onTabChange }) => {
 ViewTab.propTypes = {
   onTabChange: PropTypes.func.isRequired
 }
+
 ViewTab.defaultProps = {
   onTabChange: ()=>{}
 }

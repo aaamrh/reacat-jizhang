@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom'
 
 import { LIST_VIEW, CHART_VIEW, parseToYearAndMonth } from '../utils'
 import logo from '../logo.svg';
 
-import PriceList from '../components/PriceList'
+import PriceList from '../components/PriceList';
 import ViewTab from '../components/ViewTab';
 import TotalPrice from '../components/TotalPrice';
 import MonthPicker from '../components/MonthPicker';
 import CreateBtn from '../components/CreateBtn';
-
+import { Tabs, Tab } from '../components/Tabs'
+import { AppContext } from '../App'
+import { withContext } from '../withContext'
 
 export const categories = {
   '0': {
@@ -61,22 +64,26 @@ const newItem = {
   'cid':1
 }
 
+const tabText = [LIST_VIEW, CHART_VIEW]
+
 class Home extends Component {
   constructor(props){
     super(props)
     this.state = {
       items,
       currentDate: parseToYearAndMonth(),
-      tabView: LIST_VIEW
+      tabView: tabText[0],
+      // tabView: tabText[0],
     }
   }
 
 
-  changeView = (view) => {
+  changeView = (index) => {
     this.setState({
-      tabView: view
+      tabView: tabText[ index ]
     })
   }
+
 
   changeDate = (year, month) => {
     this.setState({
@@ -84,44 +91,64 @@ class Home extends Component {
     })
   }
 
+
   createItem = () => {
-    this.setState({
-      items: [newItem, ...this.state.items]
-    })
+    // GET 跳转页面
+    this.props.history.push('/create')
+    // ** 添加 newItem （假数据）
+    // this.setState({
+    //   items: [newItem, ...this.state.items]
+    // })
   }
 
   modifyItem = (modifiedItem) => {
-    const modifiedItems = this.state.items.map( item => {
-      if( item.id === modifiedItem.id ){
-        return { ...item, title: '被修改' }
-      }
-      return item
-    } )
+    this.props.history.push(`/edit/${ modifiedItem.id }`)
 
-    this.setState({
-      items: modifiedItems
-    })
+
+    // ** 只修改title验证组件功能
+    // const modifiedItems = this.state.items.map( item => {
+    //   if( item.id === modifiedItem.id ){
+    //     return { ...item, title: '被修改' }
+    //   }
+    //   return item
+    // } )
+    // this.setState({
+    //   items: modifiedItems
+    // })
   }
    
-  deleteItem = (deletedItem) => {
-    const filteredItems = this.state.items.filter( item => item.id !== deletedItem.id )
+  deleteItem = (item) => {
+    this.props.actions.deleteItem(item)
 
-    this.setState({
-      items: filteredItems
-    })
+    // ** 从数据中意出该数据
+    // const filteredItems = this.state.items.filter( item => item.id !== deletedItem.id )
+
+    // this.setState({
+    //   items: filteredItems
+    // })
   }
 
   render() {
-    const {items, currentDate, tabView} = this.state;
+    const {data} = this.props;
 
-    let totalIncome = 0, totalOutcome = 0;
+    const { items, categories } = data;
 
-    const itemsWithCategory = items.map( item => {
-      item.category = categories[ item.cid ]
-      return item
-    } ).filter( item => item.date.includes(`${currentDate.year}-${currentDate.month}`) )
+    const { currentDate, tabView} = this.state;
 
-    items.forEach( item => {
+    const itemsWithCategory = Object.keys(items).map(id => {
+      items[id].category = categories[ items[id].cid ] 
+      return items[id]
+    }).filter( item=>{
+      return item.date.includes(`${currentDate.year}-${currentDate.month}`) || item.date.includes(`${currentDate.year}-0${currentDate.month}`)
+    } )
+
+    // const itemsWithCategory = items.map( item => {
+    //   item.category = categories[ item.cid ]
+    //   return item
+    // } ).filter( item => item.date.includes(`${currentDate.year}-${currentDate.month}`) )
+
+    let totalIncome = 0, totalOutcome=0;
+    itemsWithCategory.forEach( item => {
       if( item.category.type === 'outcome' ){
         totalOutcome += item.price
       }else{
@@ -129,9 +156,12 @@ class Home extends Component {
       }
     } )
 
+
+    console.log(itemsWithCategory)
+
     return (
       <>
-         <header className="App-header">
+        <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
         </header>
 
@@ -148,10 +178,18 @@ class Home extends Component {
 
         <CreateBtn onClick={ this.createItem } />
 
-        <ViewTab 
+        <Tabs 
+          activeIndex={0} 
+          onTabChange={this.changeView}
+        >
+          <Tab>列表模式</Tab>
+          <Tab>图表模式</Tab>
+        </Tabs>
+
+        {/* <ViewTab 
           activeTab = { tabView }
           onTabChange = { this.changeView }
-        />
+        /> */}
         {
           tabView === LIST_VIEW && 
           <PriceList items={itemsWithCategory} 
@@ -163,9 +201,10 @@ class Home extends Component {
           tabView === CHART_VIEW && 
           <h1>图表</h1>
         }
+        <hr/>
       </>
     );
   }
 }
 
-export default Home;
+export default  withRouter( withContext(Home) ); 

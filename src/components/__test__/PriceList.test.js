@@ -32,6 +32,7 @@ describe('test PriceList component', ()=>{
   it('trigger the correct func callbacks', ()=>{
     const firstItem = wrapper.find('.list li').first()
 
+    // GET 触发点击事件用 simulate
     firstItem.find('button').first().simulate('click')
     expect( props.onModifyItem ).toHaveBeenCalledWith(itemsWithCategory[0] )
     

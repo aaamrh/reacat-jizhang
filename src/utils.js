@@ -1,5 +1,7 @@
 export const LIST_VIEW = 'list'
 export const CHART_VIEW = 'chart'
+export const TYPE_INCOME = 'income'
+export const TYPE_OUTCOME = 'outcome'
 
 
 export const range = (size, startAt=0) => {
@@ -19,4 +21,16 @@ export const parseToYearAndMonth = (str) => {
     year: date.getFullYear(),
     month: date.getMonth() + 1
   }
+}
+
+export const flatterArr = (arr) => {
+  return arr.reduce( (map, item)=>{
+    map[item.id] = item
+    return map
+  }, {} )
+
+}
+
+export const ID = () => {
+  return '_' + Math.random().toString(36).substr(2,9)
 }

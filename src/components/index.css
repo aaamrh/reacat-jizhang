@@ -1,4 +1,3 @@
-
 /* ViewTab */
 
 .m-tab{
@@ -15,4 +14,19 @@
 }
 .m-tab span.active a{
   color:#fff;
+}
+ 
+
+/* category */
+.category-item{
+  cursor: pointer;
+  background: #007bff;
+  color: #fff;
+  padding: 10px 0;
+  margin: 20px 0;
+  outline: 5px solid #fff;
+}
+.category-item.active{
+  color: #007bff;
+  background: #efefef;
 }
